@@ -1,0 +1,49 @@
+[32mINFO[0m:     [13-06-2024 22:42:56] Set chroma_server_nofile to 65535
+[32mINFO[0m:     [13-06-2024 22:42:56] Anonymized telemetry enabled. See                     https://docs.trychroma.com/telemetry for more information.
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component System
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component OpenTelemetryClient
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component SimpleAssignmentPolicy
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component SqliteDB
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component Posthog
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component LocalSegmentManager
+[36mDEBUG[0m:    [13-06-2024 22:42:56] Starting component SegmentAPI
+[32mINFO[0m:     [13-06-2024 22:42:56] Started server process [[36m6810[0m]
+[32mINFO[0m:     [13-06-2024 22:42:56] Waiting for application startup.
+[32mINFO[0m:     [13-06-2024 22:42:56] Application startup complete.
+[32mINFO[0m:     [13-06-2024 22:42:56] Uvicorn running on [1mhttp://localhost:7892[0m (Press CTRL+C to quit)
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:27] 127.0.0.1:55129 - "POST /api/v1/collections HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:47:29] 127.0.0.1:55129 - "POST /api/v1/collections HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:48:47] 127.0.0.1:56358 - "POST /api/v1/collections HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:52:29] 127.0.0.1:59597 - "POST /api/v1/collections HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 22:55:00] 127.0.0.1:62370 - "POST /api/v1/collections HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "GET /api/v1/heartbeat HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "GET /api/v1/version HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "GET /api/v1/tenants/default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "GET /api/v1/databases/default_database?tenant=default_tenant HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "GET /api/v1/pre-flight-checks HTTP/1.1" 200
+[32mINFO[0m:     [13-06-2024 23:14:54] 127.0.0.1:62071 - "POST /api/v1/collections HTTP/1.1" 200
