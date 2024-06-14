@@ -1,11 +1,17 @@
 package main
 
 import (
+	"chatcode/knowledge"
+	"chatcode/llmchat"
+
 	"github.com/alecthomas/kingpin/v2"
+	"github.com/gookit/color"
+	"github.com/gookit/gcli/v3/interact"
 )
 
 var (
-	dir = kingpin.Flag("dir", "dir of code.").Short('d').Required().String()
+	dir   = kingpin.Flag("dir", "dir of code.").Short('d').Required().String()
+	build = kingpin.Flag("build", "build knowledge from dir").Short('b').Default("false").Bool()
 )
 
 // 了解指定项目代码的这些信息
@@ -20,6 +26,23 @@ var (
 // 对整体目录进行学习,列出整体的目录
 func main() {
 	kingpin.Parse()
-	//llmchat.ChatCodeDir(*dir)
+
+	if *build {
+		result := knowledge.CreateKnowledge(*dir)
+		if result.IsError() {
+			println(result.Error())
+			return
+		}
+	}
+
+	for {
+		question, _ := interact.ReadLine("Your question? ")
+		if question != "" {
+			color.Println("Your input: ", question)
+			color.Println(llmchat.ChatWithKnowledge(*dir, question).MustGet())
+		} else {
+			color.Cyan.Println("No input!")
+		}
+	}
 
 }

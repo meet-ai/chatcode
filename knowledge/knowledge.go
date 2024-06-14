@@ -1,6 +1,7 @@
 package knowledge
 
 import (
+	"chatcode/consts"
 	"context"
 	"fmt"
 	"log"
@@ -9,7 +10,6 @@ import (
 	"strings"
 
 	chroma_go "github.com/amikos-tech/chroma-go/types"
-	"github.com/google/uuid"
 	"github.com/samber/mo"
 	"github.com/tmc/langchaingo/documentloaders"
 	"github.com/tmc/langchaingo/embeddings"
@@ -45,195 +45,83 @@ func BatchCreateEmbedding(content []string) mo.Result[EmbeddingVector] {
 	}
 	return mo.Ok[EmbeddingVector](embedings)
 }
-
-func writeChroma(docs []schema.Document) {
-	llm, err := openai.New()
-	if err != nil {
-		panic(err.Error())
-	}
+func CreateKnowledge(path string) mo.Result[string] {
+	return writeChroma(BuildDocumentIn(path).OrEmpty())
+}
+func writeChroma(docs []schema.Document) mo.Result[string] {
+	embeddingModelName := "text-embedding-ada-002"
+	llm, _ := openai.New(
+		openai.WithAPIType(openai.APITypeOpenAI),
+		openai.WithEmbeddingModel(embeddingModelName),
+	)
 	e, err := embeddings.NewEmbedder(llm)
 	if err != nil {
-		panic(err.Error())
+		return mo.Err[string](err)
 	}
 	store, errNs := chroma.New(
-		chroma.WithChromaURL("http://127.0.0.1:7892"),
+		chroma.WithChromaURL(os.Getenv("CHROMA_URL")),
 		chroma.WithOpenAIAPIKey(os.Getenv("OPENAI_API_KEY")),
 		chroma.WithDistanceFunction(chroma_go.COSINE),
-		chroma.WithNameSpace(uuid.New().String()),
+		chroma.WithNameSpace(consts.CollectionName),
 		chroma.WithEmbedder(e),
 	)
 	if errNs != nil {
-		panic(errNs.Error())
+		return mo.Err[string](err)
 	}
 	_, err = store.AddDocuments(context.TODO(), docs)
 	if err != nil {
-		println(err.Error())
+		return mo.Err[string](err)
 	}
-
-	// type meta = map[string]any
-	//
-	// // Add documents to the vector store.
-	//
-	//	_, errAd := store.AddDocuments(context.Background(), []schema.Document{
-	//		{PageContent: "Tokyo", Metadata: meta{"population": 9.7, "area": 622}},
-	//		{PageContent: "Kyoto", Metadata: meta{"population": 1.46, "area": 828}},
-	//		{PageContent: "Hiroshima", Metadata: meta{"population": 1.2, "area": 905}},
-	//		{PageContent: "Kazuno", Metadata: meta{"population": 0.04, "area": 707}},
-	//		{PageContent: "Nagoya", Metadata: meta{"population": 2.3, "area": 326}}, {PageContent: "Toyota", Metadata: meta{"population": 0.42, "area": 918}},
-	//		{PageContent: "Fukuoka", Metadata: meta{"population": 1.59, "area": 341}},
-	//		{PageContent: "Paris", Metadata: meta{"population": 11, "area": 105}},
-	//		{PageContent: "London", Metadata: meta{"population": 9.5, "area": 1572}},
-	//		{PageContent: "Santiago", Metadata: meta{"population": 6.9, "area": 641}},
-	//		{PageContent: "Buenos Aires", Metadata: meta{"population": 15.5, "area": 203}},
-	//		{PageContent: "Rio de Janeiro", Metadata: meta{"population": 13.7, "area": 1200}},
-	//		{PageContent: "Sao Paulo", Metadata: meta{"population": 22.6, "area": 1523}},
-	//	})
-	//
-	//	if errAd != nil {
-	//		log.Fatalf("AddDocument: %v\n", errAd)
-	//	}
-	//
-	// ctx := context.TODO()
-	//
-	//	type exampleCase struct {
-	//		name         string
-	//		query        string
-	//		numDocuments int
-	//		options      []vectorstores.Option
-	//	}
-	//
-	// type filter = map[string]any
-	//
-	//	exampleCases := []exampleCase{
-	//		{
-	//			name:         "Up to 5 Cities in Japan",
-	//			query:        "Which of these are cities are located in Japan?",
-	//			numDocuments: 5,
-	//			options: []vectorstores.Option{
-	//				vectorstores.WithScoreThreshold(0.8),
-	//			},
-	//		},
-	//		{
-	//			name:         "A City in South America",
-	//			query:        "Which of these are cities are located in South America?",
-	//			numDocuments: 1,
-	//			options: []vectorstores.Option{
-	//				vectorstores.WithScoreThreshold(0.8),
-	//			},
-	//		},
-	//		{
-	//			name:         "Large Cities in South America",
-	//			query:        "Which of these are cities are located in South America?",
-	//			numDocuments: 100,
-	//			options: []vectorstores.Option{
-	//				vectorstores.WithFilters(filter{
-	//					"$and": []filter{
-	//						{"area": filter{"$gte": 1000}},
-	//						{"population": filter{"$gte": 13}},
-	//					},
-	//				}),
-	//			},
-	//		},
-	//	}
-	//
-	// // run the example cases
-	// results := make([][]schema.Document, len(exampleCases))
-	//
-	//	for ecI, ec := range exampleCases {
-	//		docs, errSs := store.SimilaritySearch(ctx, ec.query, ec.numDocuments, ec.options...)
-	//		if errSs != nil {
-	//			log.Fatalf("query1: %v\n", errSs)
-	//		}
-	//		results[ecI] = docs
-	//	}
-	//
-	// // print out the results of the run
-	// fmt.Printf("Results:\n")
-	//
-	//	for ecI, ec := range exampleCases {
-	//		texts := make([]string, len(results[ecI]))
-	//		for docI, doc := range results[ecI] {
-	//			texts[docI] = doc.PageContent
-	//		}
-	//		fmt.Printf("%d. case: %s\n", ecI+1, ec.name)
-	//		fmt.Printf("    result: %s\n", strings.Join(texts, ", "))
-	//	}
+	return mo.Ok[string](consts.CollectionName)
 }
 
-func readCodeFromFolder(folderPath string) ([]schema.Document, error) {
-	var alldocs []schema.Document
+func BuildDocumentIn(folderPath string) mo.Result[[]schema.Document] {
 	splitter := NewCodeSplitter()
-
+	var docs []schema.Document
 	err := filepath.Walk(folderPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if !info.IsDir() && (strings.HasSuffix(path, ".go") || strings.HasSuffix(path, ".py")) {
-			fd, err := os.Open(path)
-			if err != nil {
-				return err
-			}
-
-			ctx := context.TODO()
-			docs, err := documentloaders.NewText(fd).LoadAndSplit(ctx, splitter)
-			if err != nil {
-				println(err)
-			}
-			for i := range docs {
-				docs[i].Metadata["source"] = path
-			}
-			alldocs = append(alldocs, docs...)
-		} else if info.IsDir() {
-			doc, _ := readCodeFromFolder(filepath.Join(folderPath, info.Name()))
-			alldocs = append(alldocs, doc...)
+			return readFileAndSplit(path, splitter, &docs)
 		}
-		//TODO add more dir
 		return nil
 	})
 
-	return alldocs, err
+	if err != nil {
+		return mo.Err[[]schema.Document](err)
+	}
+
+	return mo.Ok[[]schema.Document](docs)
 }
 
-// Function to split text into chunks
+func readFileAndSplit(path string, splitter *CodeSplitter, docs *[]schema.Document) error {
+	log.Printf("Reading file %s", path)
+	fd, err := os.Open(path)
+	if err != nil {
+		log.Printf("Error opening file %s: %v", path, err)
+		return err
+	}
 
-// Function to generate embeddings using OpenAI API
-//func generateEmbeddings(contents []string, step int) mo.Result[EmbeddingVector] {
-//	var allEmbeddings [][]float32
-//
-//	for i := 0; i < len(contents); i += step {
-//		end := i + step
-//		if end > len(contents) {
-//			end = len(contents)
-//		}
-//		batch := contents[i:end]
-//		embeddings := BatchCreateEmbedding(batch)
-//		allEmbeddings = append(allEmbeddings, embeddings.OrEmpty()...)
-//	}
-//	return mo.Ok[EmbeddingVector](allEmbeddings)
-//}
+	ctx := context.TODO()
+	docsFromFile, err := documentloaders.NewText(fd).LoadAndSplit(ctx, splitter)
+	if err != nil {
+		log.Printf("Error splitting file %s: %v", path, err)
+		return err
+	}
 
-// Function to write embeddings to Chroma
-//func writeToChroma(embeddings [][]float32, filePaths []string, chunkIds []string) error {
-//	client, err := chroma.NewClient(chroma.Config{
-//		Host: "http://localhost:8000", // Replace with your Chroma server address
-//	})
-//	if err != nil {
-//		return err
-//	}
-//
-//	for i, embedding := range embeddings {
-//		err := client.IndexDocument(chunkIds[i], embedding)
-//		if err != nil {
-//			return err
-//		}
-//	}
-//
-//	return nil
-//}
+	for i := range docsFromFile {
+		docsFromFile[i].Metadata["source"] = path
+		*docs = append(*docs, docsFromFile[i])
+	}
 
-func queryEmbedding() {
-	llm, _ := openai.New(
-		openai.WithAPIType(openai.APITypeOpenAI),
+	log.Printf("Read %d documents from %s", len(docsFromFile), path)
+	return nil
+}
+
+func QueryEmbedding(target string, topK int, threshold float32) []schema.Document {
+	llm, _ := openai.New(openai.WithAPIType(openai.APITypeOpenAI),
+		openai.WithEmbeddingModel("text-embedding-ada-002"),
 	)
 	e, qerr := embeddings.NewEmbedder(llm)
 	if qerr != nil {
@@ -242,18 +130,30 @@ func queryEmbedding() {
 	store, errNs := chroma.New(
 		chroma.WithChromaURL(os.Getenv("CHROMA_URL")),
 		chroma.WithOpenAIAPIKey(os.Getenv("OPENAI_API_KEY")),
-		chroma.WithDistanceFunction(chroma_go.COSINE),
-		chroma.WithNameSpace(uuid.New().String()),
 		chroma.WithEmbedder(e),
+		chroma.WithNameSpace(consts.CollectionName),
 	)
 	if errNs != nil {
 		log.Fatalf("new: %v\n", errNs)
 	}
+
 	docs, err := store.SimilaritySearch(context.Background(),
-		"这篇代码讲什么功能", 10,
-		vectorstores.WithScoreThreshold(0.8))
+		target, topK,
+		vectorstores.WithScoreThreshold(threshold))
 	if err != nil {
+		log.Fatalf("search: %v\n", err)
 		println(err.Error())
 	}
-	fmt.Printf("meta:%v,content:%s ,score:%f\n", docs[0].Metadata, docs[0].PageContent, docs[0].Score)
+	return docs
+}
+
+func BuildContext(docs []schema.Document) string {
+	var buf strings.Builder
+	for i, doc := range docs {
+		_, err := fmt.Fprintf(&buf, "\n %d: %s\n", i, doc.PageContent)
+		if err != nil {
+			log.Fatalf("fprint: %v\n", err)
+		}
+	}
+	return buf.String()
 }
